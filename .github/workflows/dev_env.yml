@@ -1,0 +1,8 @@
+name: Dev env CI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  ios-workflow:
+    uses: ./.github/workflows/ios_workflow.yml
