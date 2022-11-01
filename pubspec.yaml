@@ -11,9 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  injectable: ^1.2.0
-  get_it: ^6.0.0
-
+  injectable:
+  get_it:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
@@ -21,8 +20,9 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  injectable_generator: ^1.2.0
+  injectable_generator:
   flutter_lints: ^2.0.0
+  build_runner:
 
 flutter:
   uses-material-design: true
