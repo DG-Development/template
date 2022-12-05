@@ -25,18 +25,23 @@ jobs:
     needs: e2e
     name: Build Flutter App
     runs-on: ubuntu-latest
+    env:
+      KEY: ${{ secrets.DEV_KEY }}
+      GOOGLE_MAPS_API_KEY: ${{ secrets.DEV_GOOGLE_MAPS_API_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3     
+      - name: Creating .env file
+        working-directory: ./
+        run: |
+          echo ${{ env.KEY }} >> .env
+          echo ${{ env.GOOGLE_MAPS_API_KEY }} >> .env
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - name: Get dependencies
-        run: flutter channel beta
-      - run: flutter upgrade
       - run: flutter pub get
-      - run: flutter config --enable-web
-      - run: flutter create .
+      - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build web -t lib/main_dev.dart
       - name: Archive Production Artifact
         uses: actions/upload-artifact@v3
@@ -45,7 +50,7 @@ jobs:
           path: build/web
 
   deploy:
-    name: Deploy app
+    name: Deploy Website
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -59,4 +64,4 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: 1//069zeH2EL8NWICgYIARAAGAYSNwF-L9IrWy9_03-PKJVkSJyV1zAoSmkZKoLlecYkqXcQedU1EshrwoBW7jCFX5t78aosc8QhONA
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
